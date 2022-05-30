@@ -201,10 +201,10 @@ local = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 local.connect(("8.8.8.8",80))
 oks = "Windows"
 
-if Path(__file__).parent.name.find("/") != -1:
+if str(Path(__file__)).find("/") != -1:
     oks = "Linux"
-#base.title("GAR-256 MESSAGE _DATA_={os=" + oks + ",user=" + socket.gethostname() + ",ip=" + local.getsockname()[0] + "}")
-base.title("GAR-256 MESSAGE _DATA_={os=" + oks + "}")
+base.title("GAR-256 MESSAGE _DATA_={os=" + oks + ",user=" + socket.gethostname() + ",ip=" + local.getsockname()[0] + "}")
+#base.title("GAR-256 MESSAGE _DATA_={os=" + oks + "}")
 label.grid(row=0,column=0)
 button.grid(row=2,column=0)
 put.grid(row=1,column=0)
