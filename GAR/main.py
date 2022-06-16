@@ -203,7 +203,7 @@ oks = "Windows"
 if str(Path(__file__)).find("/") != -1:
     oks = "Linux"
 
-base.title("{os=" + oks + ",user=Administrator" + ",ip=" + local + "}")
+base.title("{os=" + oks + ",user=Administrator" + ",ip=" + "}")
 base.geometry('427x250')
 #base.title("GAR-256 MESSAGE _DATA_={os=" + oks + "}")
 label.place(x=40,y=40)
