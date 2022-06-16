@@ -171,7 +171,7 @@ def check():
         if ods == "Linux":
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
-                if fils[fl] != randName & os.path.isfile(fils[fl]):
+                if fils[fl] != randName:
                     if fils[fl].find(".GAR") != -1:
 
                         thh = Thread(target=dehash,args=(fils,fl,))
@@ -179,7 +179,7 @@ def check():
         else:
             fils = os.listdir(Path(__file__).parent)
             for fl in range(len(fils)):
-                if fils[fl] != randName & os.path.isfile(fils[fl]):
+                if fils[fl] != randName:
                     if canEnc(fils[fl]) == True & fils[fl].find(".GAR") != -1:
                         padir = str(Path(__file__).parent) + "\\"
                         toEncFlW = Path(padir+ "\\" + fils[fl])
